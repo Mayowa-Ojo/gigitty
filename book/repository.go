@@ -14,11 +14,11 @@ type Repository struct {
 
 // NewRepository -
 func NewRepository(conn config.MongoConn) IRepository {
-	return Repository{conn.DB}
+	return &Repository{conn.DB}
 }
 
 // GetAll - retrieves all books
-func (r Repository) GetAll(ctx *fiber.Ctx) ([]Entity, error) {
+func (r *Repository) GetAll(ctx *fiber.Ctx) ([]Entity, error) {
 	var books = make([]Entity, 0)
 	query := bson.D{{}}
 	c, err := r.DB.Collection("books").Find(ctx.Fasthttp, query)
@@ -36,4 +36,31 @@ func (r Repository) GetAll(ctx *fiber.Ctx) ([]Entity, error) {
 	}
 
 	return books, nil
+}
+
+// GetByID -
+func (r *Repository) GetByID(ctx *fiber.Ctx, filter interface{}) (*Entity, error) {
+	c := r.DB.Collection("books")
+	book := new(Entity)
+
+	result := c.FindOne(ctx.Fasthttp, filter)
+
+	if err := result.Decode(&book); err != nil {
+		return nil, err
+	}
+
+	return book, nil
+}
+
+// Create -
+func (r *Repository) Create(ctx *fiber.Ctx, b *Entity) (*mongo.InsertOneResult, error) {
+	c := r.DB.Collection("books")
+
+	result, err := c.InsertOne(ctx.Fasthttp, b)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
