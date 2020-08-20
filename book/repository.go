@@ -19,14 +19,13 @@ func NewRepository(conn config.MongoConn) IRepository {
 
 // GetAll - retrieves all books
 func (r Repository) GetAll(ctx *fiber.Ctx) ([]Entity, error) {
+	var books = make([]Entity, 0)
 	query := bson.D{{}}
 	c, err := r.DB.Collection("books").Find(ctx.Fasthttp, query)
 
 	if err != nil {
-		ctx.Status(404).Send(err)
+		return books, err
 	}
-
-	var books = make([]Entity, 0)
 
 	if err := c.All(ctx.Fasthttp, &books); err != nil {
 		return books, err

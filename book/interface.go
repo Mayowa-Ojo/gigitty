@@ -8,3 +8,8 @@ import (
 type IRepository interface {
 	GetAll(c *fiber.Ctx) ([]Entity, error)
 }
+
+// IService -
+type IService interface {
+	GetAll(c *fiber.Ctx) ([]Entity, error)
+}

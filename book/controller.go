@@ -6,21 +6,21 @@ import (
 
 // Controller -
 type Controller struct {
-	BookRepository IRepository
+	BookService IService
 }
 
 // NewController -
-func NewController(r IRepository, rg fiber.Router) {
+func NewController(s IService, router fiber.Router) {
 	ct := Controller{
-		BookRepository: r,
+		BookService: s,
 	}
 
-	rg.Get("/", ct.GetAll)
+	router.Get("/", ct.GetAll)
 }
 
 // GetAll -
 func (ct Controller) GetAll(c *fiber.Ctx) {
-	books, err := ct.BookRepository.GetAll(c)
+	books, err := ct.BookService.GetAll(c)
 
 	if err != nil {
 		c.Status(500).Send(err)

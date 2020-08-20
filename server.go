@@ -20,7 +20,8 @@ func main() {
 
 	bookRouter := api.Group("/books")
 	bookRepository := book.NewRepository(conn)
-	book.NewController(bookRepository, bookRouter)
+	bookService := book.NewService(bookRepository)
+	book.NewController(bookService, bookRouter)
 
 	app.Listen(4000)
 }
