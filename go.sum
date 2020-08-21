@@ -119,6 +119,8 @@ github.com/valyala/fasthttp v1.15.1 h1:eRb5jzWhbCn/cGu3gNJMcOfPUfXgXCcQIOHjh9ajA
 github.com/valyala/fasthttp v1.15.1/go.mod h1:YOKImeEosDdBPnxc0gy7INqi3m1zK6A+xl6TwOBhHCA=
 github.com/valyala/tcplisten v0.0.0-20161114210144-ceec8f93295a h1:0R4NLDRDZX6JcmhJgXi5E4b8Wg84ihbmUKp/GvSPEzc=
 github.com/valyala/tcplisten v0.0.0-20161114210144-ceec8f93295a/go.mod h1:v3UYOV9WzVtRmSR+PDvWpU/qWl4Wa5LApYYX4ZtKbio=
+github.com/ventu-io/go-shortid v0.0.0-20171029131806-771a37caa5cf h1:cgAKVljim9RJRcJNGjnBUajXj1FupBSdWwW4JaQG7vk=
+github.com/ventu-io/go-shortid v0.0.0-20171029131806-771a37caa5cf/go.mod h1:6rZqAOk/eYX5FJyjQJ6Z3RBSN389IXX2ijwW4FcggaM=
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c h1:u40Z8hqBAAQyv+vATcGgV0YCnDjqSL7/q/JyPhhJSPk=
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhemzwFU4jHLhdvlE6uDZjXFejJXr49I=
 github.com/xdg/stringprep v0.0.0-20180714160509-73f8eece6fdc h1:n+nNi93yXLkJvKwXNP9d55HC7lGK4H/SRcwB5IaUZLo=
