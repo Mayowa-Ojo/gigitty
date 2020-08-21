@@ -1,6 +1,10 @@
 package book
 
 import (
+	"time"
+
+	"github.com/Mayowa-Ojo/gigitty/entity"
+
 	"github.com/gofiber/fiber"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -19,7 +23,7 @@ func NewService(r IRepository) IService {
 }
 
 // GetAll -
-func (s *Service) GetAll(c *fiber.Ctx) ([]Entity, error) {
+func (s *Service) GetAll(c *fiber.Ctx) ([]entity.Book, error) {
 	books, err := s.BookRepository.GetAll(c)
 
 	if err != nil {
@@ -30,13 +34,13 @@ func (s *Service) GetAll(c *fiber.Ctx) ([]Entity, error) {
 }
 
 // GetByID -
-func (s *Service) GetByID(c *fiber.Ctx) (*Entity, error) {
-	book := new(Entity)
+func (s *Service) GetByID(c *fiber.Ctx) (*entity.Book, error) {
+	book := new(entity.Book)
 	id := c.Params("id")
 	bookID, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		return book, err
+		return nil, err
 	}
 
 	filter := bson.D{{Key: "_id", Value: bookID}}
@@ -50,12 +54,15 @@ func (s *Service) GetByID(c *fiber.Ctx) (*Entity, error) {
 }
 
 // Create -
-func (s *Service) Create(c *fiber.Ctx) (*Entity, error) {
-	book := new(Entity)
+func (s *Service) Create(c *fiber.Ctx) (*entity.Book, error) {
+	book := new(entity.Book)
 
 	if err := c.BodyParser(book); err != nil { // parse body into book struct
 		return book, err
 	}
+
+	book.CreatedAt = time.Now()
+	book.UpdatedAt = time.Now()
 
 	result, err := s.BookRepository.Create(c, book)
 	if err != nil {

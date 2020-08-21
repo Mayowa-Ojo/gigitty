@@ -2,6 +2,7 @@ package book
 
 import (
 	"github.com/Mayowa-Ojo/gigitty/config"
+	"github.com/Mayowa-Ojo/gigitty/entity"
 	"github.com/gofiber/fiber"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,10 +19,10 @@ func NewRepository(conn config.MongoConn) IRepository {
 }
 
 // GetAll - retrieves all books
-func (r *Repository) GetAll(ctx *fiber.Ctx) ([]Entity, error) {
-	var books = make([]Entity, 0)
-	query := bson.D{{}}
-	c, err := r.DB.Collection("books").Find(ctx.Fasthttp, query)
+func (r *Repository) GetAll(ctx *fiber.Ctx) ([]entity.Book, error) {
+	var books = make([]entity.Book, 0)
+	filter := bson.D{{}}
+	c, err := r.DB.Collection("books").Find(ctx.Fasthttp, filter)
 
 	if err != nil {
 		return books, err
@@ -39,9 +40,9 @@ func (r *Repository) GetAll(ctx *fiber.Ctx) ([]Entity, error) {
 }
 
 // GetByID -
-func (r *Repository) GetByID(ctx *fiber.Ctx, filter interface{}) (*Entity, error) {
+func (r *Repository) GetByID(ctx *fiber.Ctx, filter interface{}) (*entity.Book, error) {
 	c := r.DB.Collection("books")
-	book := new(Entity)
+	book := new(entity.Book)
 
 	result := c.FindOne(ctx.Fasthttp, filter)
 
@@ -53,7 +54,7 @@ func (r *Repository) GetByID(ctx *fiber.Ctx, filter interface{}) (*Entity, error
 }
 
 // Create -
-func (r *Repository) Create(ctx *fiber.Ctx, b *Entity) (*mongo.InsertOneResult, error) {
+func (r *Repository) Create(ctx *fiber.Ctx, b *entity.Book) (*mongo.InsertOneResult, error) {
 	c := r.DB.Collection("books")
 
 	result, err := c.InsertOne(ctx.Fasthttp, b)
@@ -64,3 +65,13 @@ func (r *Repository) Create(ctx *fiber.Ctx, b *Entity) (*mongo.InsertOneResult, 
 
 	return result, nil
 }
+
+// Update -
+// func (r *Repository) Update(ctx *fiber.Ctx) {
+
+// }
+
+// // Delete -
+// func (r *Repository) Delete(ctx *fiber.Ctx) {
+
+// }
