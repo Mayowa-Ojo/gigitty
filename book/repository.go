@@ -24,8 +24,8 @@ func (r *Repository) GetAll(ctx *fiber.Ctx) ([]entity.Book, error) {
 	// filter := bson.D{{}}
 	c := r.DB.Collection("books")
 
-	lookup := bson.D{{"$lookup", bson.D{{"from", "users"}, {"localField", "borrowedbyid"}, {"foreignField", "_id"}, {"as", "borrowedby"}}}}
-	unwind := bson.D{{"$unwind", "$borrowedby"}}
+	lookup := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "users"}, {Key: "localField", Value: "borrowedbyid"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "borrowedby"}}}}
+	unwind := bson.D{{Key: "$unwind", Value: "$borrowedby"}}
 	pipeline := mongo.Pipeline{lookup, unwind}
 
 	cursor, err := c.Aggregate(ctx.Fasthttp, pipeline)
