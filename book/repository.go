@@ -21,14 +21,19 @@ func NewRepository(conn config.MongoConn) IRepository {
 // GetAll - retrieves all books
 func (r *Repository) GetAll(ctx *fiber.Ctx) ([]entity.Book, error) {
 	var books = make([]entity.Book, 0)
-	filter := bson.D{{}}
-	c, err := r.DB.Collection("books").Find(ctx.Fasthttp, filter)
+	// filter := bson.D{{}}
+	c := r.DB.Collection("books")
 
+	lookup := bson.D{{"$lookup", bson.D{{"from", "users"}, {"localField", "borrowedbyid"}, {"foreignField", "_id"}, {"as", "borrowedby"}}}}
+	unwind := bson.D{{"$unwind", "$borrowedby"}}
+	pipeline := mongo.Pipeline{lookup, unwind}
+
+	cursor, err := c.Aggregate(ctx.Fasthttp, pipeline)
 	if err != nil {
-		return books, err
+		return nil, err
 	}
 
-	if err := c.All(ctx.Fasthttp, &books); err != nil {
+	if err := cursor.All(ctx.Fasthttp, &books); err != nil {
 		return books, err
 	}
 
@@ -49,7 +54,6 @@ func (r *Repository) GetByID(ctx *fiber.Ctx, filter interface{}) (*entity.Book, 
 	if err := result.Decode(&book); err != nil {
 		return nil, err
 	}
-
 	return book, nil
 }
 

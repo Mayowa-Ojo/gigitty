@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Mayowa-Ojo/gigitty/entity"
+	u "github.com/Mayowa-Ojo/gigitty/user"
 
 	"github.com/gofiber/fiber"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,12 +14,14 @@ import (
 // Service -
 type Service struct {
 	BookRepository IRepository
+	UserRepository u.IRepository
 }
 
 // NewService -
-func NewService(r IRepository) IService {
+func NewService(bookRepo IRepository, userRepo u.IRepository) IService {
 	return &Service{
-		BookRepository: r,
+		BookRepository: bookRepo,
+		UserRepository: userRepo,
 	}
 }
 
@@ -61,6 +64,13 @@ func (s *Service) Create(c *fiber.Ctx) (*entity.Book, error) {
 		return book, err
 	}
 
+	id := c.Params("id", "5f40b2f29554c3f9b98175f5")
+	userID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	book.BorrowedByID = userID
 	book.CreatedAt = time.Now()
 	book.UpdatedAt = time.Now()
 
