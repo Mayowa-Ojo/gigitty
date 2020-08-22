@@ -5,6 +5,7 @@ import (
 
 	"github.com/Mayowa-Ojo/gigitty/book"
 	"github.com/Mayowa-Ojo/gigitty/config"
+	"github.com/Mayowa-Ojo/gigitty/user"
 	"github.com/gofiber/fiber"
 )
 
@@ -19,9 +20,16 @@ func main() {
 	api := app.Group("/api/v1")
 
 	bookRouter := api.Group("/books")
+	userRouter := api.Group("/users")
+
 	bookRepository := book.NewRepository(conn)
-	bookService := book.NewService(bookRepository)
+	userRepository := user.NewRepository(conn)
+
+	bookService := book.NewService(bookRepository, userRepository)
+	userService := user.NewService(userRepository)
+
 	book.NewController(bookService, bookRouter)
+	user.NewController(userService, userRouter)
 
 	app.Listen(4000)
 }
