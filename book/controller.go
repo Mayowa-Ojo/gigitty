@@ -1,6 +1,7 @@
 package book
 
 import (
+	"github.com/Mayowa-Ojo/gigitty/utils"
 	"github.com/gofiber/fiber"
 )
 
@@ -25,27 +26,31 @@ func (ct *Controller) GetAll(c *fiber.Ctx) {
 	books, err := ct.BookService.GetAll(c)
 
 	if err != nil {
-		c.Status(500).Send(err)
+		err := new(fiber.Error)
+		err.Code = 404
+		err.Message = "[Error]: Resource not found"
+		c.Next(err)
 		return
 	}
 
-	if err := c.JSON(books); err != nil {
-		c.Status(500).Send(err)
-	}
+	r := utils.NewResponse()
+	r.JSONResponse(c, true, 200, "books found", books)
 }
 
 // GetByID -
 func (ct *Controller) GetByID(c *fiber.Ctx) {
 	book, err := ct.BookService.GetByID(c)
+	r := utils.NewResponse()
 
 	if err != nil {
-		c.Status(500).Send(err)
+		err := new(fiber.Error)
+		err.Code = 404
+		err.Message = "[Error]: Resource not found"
+		c.Next(err)
 		return
 	}
 
-	if err := c.JSON(book); err != nil {
-		c.Status(500).Send(err)
-	}
+	r.JSONResponse(c, true, 200, "book found", book)
 }
 
 // Create -
