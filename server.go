@@ -6,6 +6,7 @@ import (
 	"github.com/Mayowa-Ojo/gigitty/book"
 	"github.com/Mayowa-Ojo/gigitty/config"
 	"github.com/Mayowa-Ojo/gigitty/user"
+	"github.com/Mayowa-Ojo/gigitty/utils"
 	"github.com/gofiber/fiber"
 )
 
@@ -19,6 +20,8 @@ func main() {
 	app := fiber.New()
 	api := app.Group("/api/v1")
 
+	app.Settings.ErrorHandler = utils.ErrorHandler
+
 	bookRouter := api.Group("/books")
 	userRouter := api.Group("/users")
 
@@ -30,6 +33,8 @@ func main() {
 
 	book.NewController(bookService, bookRouter)
 	user.NewController(userService, userRouter)
+
+	app.Use(utils.NotFoundError)
 
 	app.Listen(4000)
 }
