@@ -3,9 +3,11 @@ module github.com/Mayowa-Ojo/gigitty
 go 1.13
 
 require (
+	github.com/asaskevich/govalidator v0.0.0-20200819183940-29e1ff8eb0bb // indirect
 	github.com/cosmtrek/air v1.21.2 // indirect
 	github.com/creack/pty v1.1.11 // indirect
 	github.com/fatih/color v1.9.0 // indirect
+	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/gofiber/fiber v1.14.1
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/klauspost/compress v1.10.11 // indirect
