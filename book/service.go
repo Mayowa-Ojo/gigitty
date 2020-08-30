@@ -70,7 +70,14 @@ func (s *Service) Create(c *fiber.Ctx) (*entity.Book, error) {
 		return nil, err
 	}
 
+	filter := bson.D{{Key: "_id", Value: userID}}
+	user, err := s.UserRepository.GetByID(c, filter)
+	if err != nil {
+		return nil, err
+	}
+
 	book.BorrowedByID = userID
+	book.BorrowedBy = user
 	book.CreatedAt = time.Now()
 	book.UpdatedAt = time.Now()
 
@@ -79,7 +86,7 @@ func (s *Service) Create(c *fiber.Ctx) (*entity.Book, error) {
 		return book, err
 	}
 
-	filter := bson.D{{Key: "_id", Value: result.InsertedID}}
+	filter = bson.D{{Key: "_id", Value: result.InsertedID}}
 	book, err = s.BookRepository.GetByID(c, filter)
 	if err != nil {
 		return nil, err

@@ -15,7 +15,7 @@ type Book struct {
 	Borrowed     bool               `json:"borrowed"`
 	Missing      bool               `json:"missing"`
 	BorrowedByID primitive.ObjectID `json:"borrowedById"`
-	BorrowedBy   User               `json:"borrowedBy"`
+	BorrowedBy   *User              `json:"borrowedBy"`
 	CreatedAt    time.Time          `json:"createdAt"`
 	UpdatedAt    time.Time          `json:"updatedAt"`
 }
