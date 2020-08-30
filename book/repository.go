@@ -24,7 +24,7 @@ func (r *Repository) GetAll(ctx *fiber.Ctx) ([]entity.Book, error) {
 	// filter := bson.D{{}}
 	c := r.DB.Collection("books")
 
-	lookup := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "users"}, {Key: "localField", Value: "borrowedbyid"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "borrowedby"}}}}
+	lookup := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "users"}, {Key: "localField", Value: "userid"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "borrowedby"}}}}
 	unwind := bson.D{{Key: "$unwind", Value: "$borrowedby"}}
 	pipeline := mongo.Pipeline{lookup, unwind}
 
@@ -34,11 +34,11 @@ func (r *Repository) GetAll(ctx *fiber.Ctx) ([]entity.Book, error) {
 	}
 
 	if err := cursor.All(ctx.Fasthttp, &books); err != nil {
-		return books, err
+		return nil, err
 	}
 
 	if err := ctx.JSON(books); err != nil {
-		return books, err
+		return nil, err
 	}
 
 	return books, nil
